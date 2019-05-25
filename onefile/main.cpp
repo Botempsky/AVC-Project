@@ -73,11 +73,12 @@ int main(){
 	open_screen_stream();
 
 	int count = 0;
-	camera c;
+	camera cam;
 	while(count < 100){
 		take_picture();
 		update_screen();
-		cout << c.getError() << endl;
+		cout << cam.lineCheck() << endl;
+		cout << cam.getError() << endl;
 		count++;
 		sleep1(1000);
 	}
