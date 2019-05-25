@@ -15,7 +15,7 @@ class camera{
 	const double div = 3243600; // maximum possible value of index[] * whiteness[]
 	public:
 	
-	// returns error value from -1 to 1 
+	// returns proportional error value from -1 to 1 
 	double getError(){
 		double error = 0;
 		// iterate horizontally over all the pixels along the middle of the screen 
@@ -55,10 +55,12 @@ class camera{
 		}
 		return false;
 	}
+	
+	// returns derivate of error value 	
+	double getDeriv(/*potenitally some parameters here*/){
 		
+	}
 };
-
-
 
 double getTime(){
 	struct timespec ts_start;
@@ -74,8 +76,13 @@ double getTime(){
 	return 1.0;
 }
 
-
-
+class motor{
+	private:
+	double Kp = 0;
+	double Kd = 0;
+	public:
+	
+};
 
 int main(){
 	// initial setup
@@ -85,8 +92,11 @@ int main(){
 	cout<<"After init() error="<<err<<endl;
 	open_screen_stream();
 
-	int count = 0;
+	// create instances of classes
 	camera cam;
+	
+	// begin picture loop
+	int count = 0;
 	while(count < 100){
 		take_picture();
 		update_screen();

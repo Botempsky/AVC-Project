@@ -10,6 +10,8 @@ int main(){
 	cout<<" Hello"<<endl;
 	err = init(1);
 	cout<<"After init() error="<<err<<endl;
+	
+	/**
 	open_screen_stream();
 	int count = 0;
 	int white = 0;
@@ -23,12 +25,13 @@ int main(){
 			if(white < 100){
 				linecheck++;
 			}
-			
-			
 		}
 		cout << linecheck << endl;
 		
 		
 		count++;
 	}
+	**/
+	
+	
 }
