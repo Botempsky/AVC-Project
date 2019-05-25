@@ -24,11 +24,25 @@ class camera{
 			else{
 				index[i] = i - (IMG_WIDTH/2);
 			}
-			//cout << whiteness[i] << endl;
+			cout << whiteness[i] << endl;
 			error += (index[i]*whiteness[i]);
 			//cout << error << endl;
 		}
 		return error/div;
+	}
+	
+	bool lineCheck(){
+		int blackCount = 0;
+		for(int i = 0; i < IMG_WIDTH; i++){
+			if(get_pixel(IMG_HEIGHT/2, i , 3) < 100){
+				blackCount++;
+			}
+				
+		}
+		if(blackCount > 40 && blackCount < 70){
+			return true;
+		}
+		return false;
 	}
 		
 };
@@ -60,11 +74,12 @@ int main(){
 
 	int count = 0;
 	camera c;
-	while(count < 1){
+	while(count < 100){
 		take_picture();
 		update_screen();
 		cout << c.getError() << endl;
 		count++;
+		sleep1(1000);
 	}
 	
 	
