@@ -1,22 +1,30 @@
+#include <iostream>
 #include "camera.h"
 #include "E101.h"
+
 using namespace std;
-
+int debug = 1;
+	
 double error::getError() {
-    int count = 0;
-    open_screen_stream();
-    while (count < 500) {
-        take_picture();
-        update_screen(): // remove this in actual operation
-        int error = 0; // resets error value each frame
-        for (int i = 0; i < IMG_WIDTH; i++) {
-            whiteness[i] = get_pixel(i, IMG_WIDTH / 2, 3); // initialise array element equal to pixel whiteness
-            shift[i] = i - IMG_WIDTH / 2; // initialise index shifting matrix (-160 to 0 to +160)
-            error += (whiteness[i] * shift[i]) //divide by max value
-        }
-        cout << error << endl;
-    }
-
+	int err;
+	err = init(0);
+	if(debug){
+		int count = 0;
+		open_screen_stream();
+		
+			take_picture();
+			//update_screen(); // remove this in actual operation
+			int error = 0; // resets error value each frame
+			//for (int i = 0; i < IMG_WIDTH; i++) {
+				//whiteness[i] = get_pixel(i, IMG_HEIGHT/2, 3); // initialise array element equal to pixel whiteness
+				//shift[i] = i - IMG_WIDTH / 2; // initialise index shifting matrix (-160 to 0 to +160)
+				//error += (whiteness[i] * shift[i]); //divide by max value
+		//	}
+			count ++;
+		
+		
+	}
+	return 1;
 }
 
 double error::getThresh() {

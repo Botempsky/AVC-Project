@@ -10,8 +10,8 @@ private:
     int shift [IMG_WIDTH];
     
 public:
-    inline double getError();
-    inline double getThresh();
+    double getError();
+    double getThresh();
 };
 #endif
 

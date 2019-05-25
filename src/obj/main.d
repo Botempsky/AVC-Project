@@ -1,8 +1,10 @@
-obj/main.o: main.cpp ../include/gate.h ../include/motorControl.h \
- ../include/imageProcessing.h
+obj/main.o: main.cpp ../include/gate.h ../include/motor.h \
+ ../include/camera.h ../include/E101.h
 
 ../include/gate.h:
 
-../include/motorControl.h:
+../include/motor.h:
 
-../include/imageProcessing.h:
+../include/camera.h:
+
+../include/E101.h:
