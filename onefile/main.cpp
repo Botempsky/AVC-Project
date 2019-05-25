@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+#include <sys/time.h> 
 #include "E101.h"
 using namespace std;
 
@@ -22,14 +24,30 @@ class camera{
 			else{
 				index[i] = i - (IMG_WIDTH/2);
 			}
-			cout << whiteness[i] << endl;
+			//cout << whiteness[i] << endl;
 			error += (index[i]*whiteness[i]);
-			cout << error << endl;
+			//cout << error << endl;
 		}
 		return error/div;
 	}
 		
 };
+
+double getTime(){
+	struct timespec ts_start;
+	struct timespec ts_end;
+	clock_gettime(CLOCK_MONOTONIC, &ts_start);
+	for(int i = 0; i < 560; i++){
+		//code_to_time();
+		double x = sin(i);
+	}
+	clock_gettime(CLOCK_MONOTONIC, &ts_end);
+	
+	long elapsed = (ts_end.tv_sec-ts_start.tv_sec)*1000000000 + ts_end.tv_nsec-ts_start.tv_nsec;
+	return 1.0;
+}
+
+
 
 
 int main(){
