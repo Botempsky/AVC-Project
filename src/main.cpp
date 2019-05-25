@@ -1,7 +1,7 @@
 #include <iostream>
 #include "gate.h"
-#include "motorControl.h"
-#include "imageProcessing.h"
+#include "motor.h"
+#include "camera.h"
 using namespace std;
 
 int main(){

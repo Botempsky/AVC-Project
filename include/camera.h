@@ -1,6 +1,6 @@
 #pragma once
-#ifndef IMAGEPROCESSING_H
-#define IMAGEPROCESSING_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
 class error{
 private:

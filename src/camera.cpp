@@ -1,7 +1,7 @@
-#include "imageProcessing.h"
+#include "camera.h"
 #include "E101.h"
 double error::getError(){
-    return 1; // for the time being
+    
 }
 double error::getThresh(){
     take_picture();
