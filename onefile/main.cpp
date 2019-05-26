@@ -11,13 +11,12 @@ int debug = 0; // condition for enabling debugging print statements
 
 double error1 = 0;
 double time1 = 0;
-double Kd = 0;
-double Kp = 0;
 
-double getTime(){
+// RESULT IS IN NANOSECONDS 
+long getTime(){
 	struct timespec start;
 	clock_gettime(CLOCK_MONOTONIC, &start);
-	double time = start.tv_sec * 1000000000 + start.tv_nsec;
+	long time = start.tv_sec + start.tv_nsec;
 	return time;
 }
 
@@ -71,11 +70,12 @@ class camera{
 	}
 	
 	// returns derivative of error value 	
-	double getDeriv(){
-		double error = camera::getError();
-		double time = getTime();
-
+	double getDeriv(double e){
+		double error = e;
+		long time = getTime();
+		printf("Error: %f Time: %ld\n", error, time);
 		double deriv = (error - error1)/(time - time1);
+		cout << "Deriv: " << deriv << endl;
 		error1 = error;
 		time1 = time;
 		return deriv;
@@ -84,10 +84,15 @@ class camera{
 
 class motor{
 	private:
-	double Kp = 0;
-	double Kd = 0;
+	const unsigned char setPoint = 47;
+	unsigned char vLeft = setPoint + 9; // this is base value for motor 5
+	unsigned char vRight = setPoint - 9; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
+	
 	public:
 	
+	void goForward(double adj){
+		
+	}
 };
 
 int main(){
@@ -101,15 +106,19 @@ int main(){
 	// create instances of classes
 	camera cam;
 	
+	double Kd = 0;
+	double Kp = 1;
+	
 	// begin picture loop
 	int count = 0;
-	while(count < 100){
+	while(count < 10){
 		take_picture();
 		update_screen();
 		
-		cout << cam.getDeriv() << endl;
+		double error = cam.getError();
+		double adjust = Kp * error + Kd * cam.getDeriv(error);
+		cout << adjust << endl;
 		
-		// calc adjustment = Kp*getError() + Kd * getDeriv()
 		// adjust motors
 		
 		if(debug){
@@ -117,7 +126,7 @@ int main(){
 			cout << cam.getError() << endl;
 		}
 		count++;
-		sleep1(1000);
+		
 	}
 	
 	

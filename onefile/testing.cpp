@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sys/time.h> 
+#include <cmath>
 #include "E101.h"
 using namespace std;
 
@@ -36,20 +37,22 @@ int main(){
 	**/
 	
 	for(int i = 0; i < 20; i++){
-		take_picture();
-		update_screen();
-		
-		struct timeval time;
-		gettimeofday(&time, nullptr);
-		double timestamp = time.tv_sec *1000000 + time.tv_usec * 0.000001;
-		cout << timestamp << endl;
+		//take_picture();
+		//update_screen();
 		
 		/**
-		struct timespec start;
-		clock_gettime(CLOCK_REALTIME, &start);
-		double time = start.tv_sec + start.tv_nsec;
-		cout << time << endl;
+		struct timeval time;
+		gettimeofday(&time, nullptr);
+		long timestamp = time.tv_sec *1000000 + time.tv_usec * 0.000001;
+		cout << abs(timestamp) << endl;
 		**/
+				
+		
+		struct timespec start;
+		clock_gettime(CLOCK_MONOTONIC, &start);
+		long time = start.tv_sec + start.tv_nsec;
+		cout << time << endl;
+		sleep1(500);
 		
 	}
 }
