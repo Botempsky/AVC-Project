@@ -11,6 +11,7 @@ int main(){
 	cout<<" Hello"<<endl;
 	err = init(1);
 	cout<<"After init() error="<<err<<endl;
+	open_screen_stream();
 	
 	/**
 	open_screen_stream();
@@ -35,10 +36,20 @@ int main(){
 	**/
 	
 	for(int i = 0; i < 20; i++){
+		take_picture();
+		update_screen();
+		
+		struct timeval time;
+		gettimeofday(&time, nullptr);
+		double timestamp = time.tv_sec *1000000 + time.tv_usec * 0.000001;
+		cout << timestamp << endl;
+		
+		/**
 		struct timespec start;
-		clock_gettime(CLOCK_MONOTONIC, &start);
-		double time = start.tv_sec * 1000000000 + start.tv_nsec;
+		clock_gettime(CLOCK_REALTIME, &start);
+		double time = start.tv_sec + start.tv_nsec;
 		cout << time << endl;
+		**/
 		
 	}
 }

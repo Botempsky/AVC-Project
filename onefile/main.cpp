@@ -73,12 +73,12 @@ class camera{
 	// returns derivative of error value 	
 	double getDeriv(){
 		double error = camera::getError();
-		
-		// double deriv = (error - error1)/(time - time1);
-		// error1 = error;
-		// time1 = time;
-		// return deriv;
-		return 1;
+		double time = getTime();
+
+		double deriv = (error - error1)/(time - time1);
+		error1 = error;
+		time1 = time;
+		return deriv;
 	}
 };
 
@@ -107,7 +107,7 @@ int main(){
 		take_picture();
 		update_screen();
 		
-		cout << getTime() << endl;
+		cout << cam.getDeriv() << endl;
 		
 		// calc adjustment = Kp*getError() + Kd * getDeriv()
 		// adjust motors
@@ -117,7 +117,7 @@ int main(){
 			cout << cam.getError() << endl;
 		}
 		count++;
-		//sleep1(1000);
+		sleep1(1000);
 	}
 	
 	
