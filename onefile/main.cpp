@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <sys/time.h>
 #include "E101.h"
 using namespace std;
@@ -73,9 +73,9 @@ class camera{
 	double getDeriv(double e){
 		double error = e;
 		long time = getTime();
-		printf("Error: %f Time: %ld\n", error, time);
+		//printf("Error: %f Time: %ld\n", error, time);
 		double deriv = (error - error1)/(time - time1);
-		cout << "Deriv: " << deriv << endl;
+		//cout << "Deriv: " << deriv << endl;
 		error1 = error;
 		time1 = time;
 		return deriv;
@@ -84,14 +84,19 @@ class camera{
 
 class motor{
 	private:
-	const unsigned char setPoint = 47;
-	unsigned char vLeft = setPoint + 9; // this is base value for motor 5
-	unsigned char vRight = setPoint - 9; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
+	const double setPoint = 47;
+	double baseLeft = setPoint + 9; // this is base value for motor 5
+	double baseRight = setPoint - 9; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
 	
 	public:
 	
 	void goForward(double adj){
-		
+		//int dv = round(adj); // bear in mind this is only for when adj is just below 0 and needs to round to 1
+		double vLeft = baseLeft + adj;
+		double vRight = baseRight - adj;
+		set_motors(1,vRight);
+		set_motors(5,vLeft);
+		hardware_exchange();
 	}
 };
 
@@ -105,21 +110,25 @@ int main(){
 
 	// create instances of classes
 	camera cam;
+	motor mot;
 	
 	double Kd = 0;
-	double Kp = 1;
+	double Kp = 20;
 	
 	// begin picture loop
 	int count = 0;
-	while(count < 10){
+	while(count < 100){
 		take_picture();
 		update_screen();
 		
 		double error = cam.getError();
 		double adjust = Kp * error + Kd * cam.getDeriv(error);
-		cout << adjust << endl;
 		
+		//unsigned char test = round(adjust);
+		cout << adjust << endl;
+		//cout << static_cast<unsigned>(test) << endl;
 		// adjust motors
+		mot.goForward(adjust);
 		
 		if(debug){
 			cout << cam.lineCheck() << endl;
