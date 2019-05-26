@@ -9,9 +9,8 @@ int main(){
 	cout<<"After init() error="<<err<<endl;
 	
 	
-	
-	set_motors(1,48); // Right motor - max 65
-	set_motors(5,48); // Left motor - max 30
+	set_motors(1,47);
+	set_motors(5,47);
 	hardware_exchange();
 	
 }

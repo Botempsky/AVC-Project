@@ -1,12 +1,18 @@
 #include <iostream>
 #include <math.h>
-#include <sys/time.h> 
+#include <sys/time.h>
 #include "E101.h"
 using namespace std;
+
 
 const static int IMG_WIDTH = 320;
 const static int IMG_HEIGHT = 240;
 int debug = 0; // condition for enabling debugging print statements
+
+double error1 = 0;
+double time1 = 0;
+double Kd = 0;
+double Kp = 0;
 
 class camera{
 	private:
@@ -36,6 +42,7 @@ class camera{
 				cout << error << endl;
 			}
 		}
+		
 		return error/div; // we divide by the maximum possible result to get error between 1 and -1
 	}
 	
@@ -49,15 +56,21 @@ class camera{
 			}
 				
 		}
-		// these are experimentally determined values here...
+		// these are experimentally determined values here... the line tends to be ~64 pixels wide
 		if(blackCount > 40 && blackCount < 70){
 			return true;
 		}
 		return false;
 	}
 	
-	// returns derivate of error value 	
-	double getDeriv(/*potenitally some parameters here*/){
+	// returns derivative of error value 	
+	double getDeriv(){
+		double error = camera::getError();
+		
+		// double deriv = (error - error1)/(time - time1);
+		// error1 = error;
+		// time1 = time;
+		// return deriv;
 		
 	}
 };
@@ -66,10 +79,7 @@ double getTime(){
 	struct timespec ts_start;
 	struct timespec ts_end;
 	clock_gettime(CLOCK_MONOTONIC, &ts_start);
-	for(int i = 0; i < 560; i++){
-		//code_to_time();
-		double x = sin(i);
-	}
+	// code to time
 	clock_gettime(CLOCK_MONOTONIC, &ts_end);
 	
 	long elapsed = (ts_end.tv_sec-ts_start.tv_sec)*1000000000 + ts_end.tv_nsec-ts_start.tv_nsec;
@@ -100,8 +110,15 @@ int main(){
 	while(count < 100){
 		take_picture();
 		update_screen();
-		//cout << cam.lineCheck() << endl;
-		cout << cam.getError() << endl;
+		
+		
+		// calc adjustment = Kp*getError() + Kd * getDeriv()
+		// adjust motors
+		
+		if(debug){
+			cout << cam.lineCheck() << endl;
+			cout << cam.getError() << endl;
+		}
 		count++;
 		sleep1(1000);
 	}
