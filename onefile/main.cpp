@@ -91,9 +91,17 @@ class motor{
 	public:
 	
 	void goForward(double adj){
-		//int dv = round(adj); // bear in mind this is only for when adj is just below 0 and needs to round to 1
-		double vLeft = baseLeft + adj;
-		double vRight = baseRight - adj;
+		// this block of code is a work in progress 
+		double vLeft = baseLeft;
+		double vRight = baseRight;
+		if(adj < 0){
+			vRight += adj;
+			vLeft += adj;
+		}
+		else{
+			vRight -= adj;
+			vLeft -= adj;
+		}
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
@@ -120,7 +128,6 @@ int main(){
 	while(count < 100){
 		take_picture();
 		update_screen();
-		
 		double error = cam.getError();
 		double adjust = Kp * error + Kd * cam.getDeriv(error);
 		
@@ -130,12 +137,16 @@ int main(){
 		// adjust motors
 		mot.goForward(adjust);
 		
+			
+		
+		
+		
 		if(debug){
 			cout << cam.lineCheck() << endl;
 			cout << cam.getError() << endl;
 		}
 		count++;
-		
+		sleep1(100);		
 	}
 	
 	
