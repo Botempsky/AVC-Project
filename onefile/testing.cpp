@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sys/time.h> 
 #include "E101.h"
 using namespace std;
 
@@ -33,5 +34,11 @@ int main(){
 	}
 	**/
 	
-	
+	for(int i = 0; i < 20; i++){
+		struct timespec start;
+		clock_gettime(CLOCK_MONOTONIC, &start);
+		double time = start.tv_sec * 1000000000 + start.tv_nsec;
+		cout << time << endl;
+		
+	}
 }

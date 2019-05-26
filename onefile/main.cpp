@@ -14,6 +14,13 @@ double time1 = 0;
 double Kd = 0;
 double Kp = 0;
 
+double getTime(){
+	struct timespec start;
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	double time = start.tv_sec * 1000000000 + start.tv_nsec;
+	return time;
+}
+
 class camera{
 	private:
 	int whiteness[IMG_WIDTH]; // stores whiteness of each pixel 
@@ -71,20 +78,9 @@ class camera{
 		// error1 = error;
 		// time1 = time;
 		// return deriv;
-		
+		return 1;
 	}
 };
-
-double getTime(){
-	struct timespec ts_start;
-	struct timespec ts_end;
-	clock_gettime(CLOCK_MONOTONIC, &ts_start);
-	// code to time
-	clock_gettime(CLOCK_MONOTONIC, &ts_end);
-	
-	long elapsed = (ts_end.tv_sec-ts_start.tv_sec)*1000000000 + ts_end.tv_nsec-ts_start.tv_nsec;
-	return 1.0;
-}
 
 class motor{
 	private:
@@ -111,6 +107,7 @@ int main(){
 		take_picture();
 		update_screen();
 		
+		cout << getTime() << endl;
 		
 		// calc adjustment = Kp*getError() + Kd * getDeriv()
 		// adjust motors
@@ -120,7 +117,7 @@ int main(){
 			cout << cam.getError() << endl;
 		}
 		count++;
-		sleep1(1000);
+		//sleep1(1000);
 	}
 	
 	
