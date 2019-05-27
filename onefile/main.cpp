@@ -109,13 +109,22 @@ class motor{
 		set_motors(5,vLeft);
 		hardware_exchange();
 	}
+	void goBack(){
+		double vLeft = baseRight;
+		double vRight = baseLeft;
+		set_motors(1,vRight);
+		set_motors(5,vLeft);
+		hardware_exchange();
+		sleep1(100);
+	}
+	
 };
 
 int main(){
 	// initial setup
 	int err;
 	cout<<" Hello"<<endl;
-	err = init(1);
+	err = init(0);
 	cout<<"After init() error="<<err<<endl;
 	open_screen_stream();
 
@@ -140,7 +149,12 @@ int main(){
 			double adjust = Kp * error + Kd * cam.getDeriv(error); // calculates motor adjustment value from error and its derivative
 			cout << adjust << endl;
 
-			mot.followLine(adjust); // pass the adjustment to motor control
+			if(cam.lineCheck()){
+				mot.followLine(adjust); // pass the adjustment to motor control
+			}
+			else{
+				mot.goBack();              
+			}
 
 			count++;
 			sleep1(100);		
