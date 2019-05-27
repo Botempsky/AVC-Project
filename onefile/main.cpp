@@ -101,18 +101,10 @@ class motor{
 	
 	public:
 	// sets motor speeds according to error
-	void goForward(double adj){
+	void followLine(double adj){
 		// this block of code is a work in progress 
-		double vLeft = baseLeft; 
-		double vRight = baseRight;
-		if(adj < 0){ // if adjustment value is negative (line to the left)
-			vRight += adj; // speed up right motor by adjust
-			vLeft += adj; // slow down left motor by adjust
-		}
-		else{ // if adjustment value is positive (line to the right)
-			vRight -= adj; // slow down right motor
-			vLeft -= adj; // speed up left motor
-		}
+		double vLeft = baseLeft + adj;
+		double vRight = baseRight + adj;
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
@@ -148,7 +140,7 @@ int main(){
 			double adjust = Kp * error + Kd * cam.getDeriv(error); // calculates motor adjustment value from error and its derivative
 			cout << adjust << endl;
 
-			mot.goForward(adjust); // pass the adjustment to motor control
+			mot.followLine(adjust); // pass the adjustment to motor control
 
 			count++;
 			sleep1(100);		
