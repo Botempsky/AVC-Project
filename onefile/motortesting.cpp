@@ -8,8 +8,8 @@ int main(){
 	err = init(1);
 	cout<<"After init() error="<<err<<endl;
 
-	set_motors(1,47);
-	set_motors(5,47);
+	set_motors(1,52);
+	set_motors(5,43);
 	hardware_exchange();
 		
 }

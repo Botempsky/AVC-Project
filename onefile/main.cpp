@@ -96,26 +96,26 @@ class camera{
 class motor{
 	private:
 	const double setPoint = 47; // set point speed (both motors stopped)
-	double baseLeft = setPoint + 9; // this is base value for motor 5
-	double baseRight = setPoint - 9; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
+	double baseLeft = setPoint + 4; // this is base value for motor 5
+	double baseRight = setPoint - 4; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
 	
 	public:
 	// sets motor speeds according to error
 	void followLine(double adj){
 		// this block of code is a work in progress 
-		double vLeft = baseLeft + adj;
-		double vRight = baseRight + adj;
+		double vLeft = baseLeft - adj;
+		double vRight = baseRight - adj;
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
 	}
 	void goBack(){
-		double vLeft = baseRight;
-		double vRight = baseLeft;
+		double vLeft = setPoint - 4;
+		double vRight = setPoint + 4;
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
-		sleep1(100);
+		sleep1(10);
 	}
 	
 };
@@ -149,15 +149,13 @@ int main(){
 			double adjust = Kp * error + Kd * cam.getDeriv(error); // calculates motor adjustment value from error and its derivative
 			cout << adjust << endl;
 
-			if(cam.lineCheck()){
+			
 				mot.followLine(adjust); // pass the adjustment to motor control
-			}
-			else{
-				mot.goBack();              
-			}
+			
+			
 
 			count++;
-			sleep1(100);		
+			//sleep1(100);		
 		}
 	
 	//} open gate bracket
