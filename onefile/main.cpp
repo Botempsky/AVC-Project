@@ -81,14 +81,17 @@ class camera{
 	}
 	
 	// returns derivative of error value 	
-	double getDeriv(double e){
+	double getDeriv(double e, double f){
 		double error = e; // stores error in variable for safekeeping
 		long time = getTime(); // stores current timestamp
 		double deriv = (error - error1)/(time - time1); // compute derivative (dividing double by long - doesnt seem to cause problems??)
 		//printf("Error: %f Time: %ld\n", error, time);
 		//cout << "Deriv: " << deriv << endl;
-		error1 = error; // set previous error to current error (for use in the next iteration)
+		error1 = f; // set previous error to current error (for use in the next iteration)
 		time1 = time; // set previous time to current time
+		//cout<<error<<endl;
+		//cout<<error1<<endl;
+		cout<<deriv<<endl;
 		return deriv;
 	}
 };
@@ -133,30 +136,34 @@ int main(){
 	motor mot;
 	
 	// constants need to be determined (and maybe moved to a different place?)
-	double Kd = 0;
-	double Kp = 20;
+	double Kd = 1;
+	double Kp = 10;
 	
 	// calls openGate and proceeds if gate opens (only used in actual operation)
-	//if(openGate()){ 
+	if(openGate()){ 
 	
 		// begin main loop
+		double error1 = 0;
 		int count = 0;
 		while(count < 100){
 			take_picture();
 			update_screen();
-			
+						
+
 			double error = cam.getError(); // calls getError() method and stores error result in variable 
-			double adjust = Kp * error + Kd * cam.getDeriv(error); // calculates motor adjustment value from error and its derivative
+			double adjust = Kp * error + Kd * cam.getDeriv(error, error1); // calculates motor adjustment value from error and its derivative
 			cout << adjust << endl;
 
-			
+			//if(cam.lineCheck()){
 				mot.followLine(adjust); // pass the adjustment to motor control
-			
-			
-
+			//}
+			//else{
+			//	mot.goBack();
+			//}
+			error1 = cam.getError();
 			count++;
 			//sleep1(100);		
 		}
 	
-	//} open gate bracket
+	} //open gate bracket
 }
