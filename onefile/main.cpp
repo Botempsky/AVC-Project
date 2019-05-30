@@ -73,25 +73,28 @@ class camera{
 			}
 				
 		}
+		cout << "count: " << blackCount <<  endl;
 		// these are experimentally determined values here... the line tends to be ~64 pixels wide
-		if(blackCount > 40 && blackCount < 70){
+		if(blackCount > 30){
 			return true;
 		}
 		return false;
 	}
 	
 	// returns derivative of error value 	
-	double getDeriv(double e, double f){
-		double error = e; // stores error in variable for safekeeping
+	double getDeriv(double e){
+		double error = e; // stores error in variable for safekeeping 
 		long time = getTime(); // stores current timestamp
+//		cout << error<< endl;
+//		cout << error1 << endl;
 		double deriv = (error - error1)/(time - time1); // compute derivative (dividing double by long - doesnt seem to cause problems??)
 		//printf("Error: %f Time: %ld\n", error, time);
 		//cout << "Deriv: " << deriv << endl;
-		error1 = f; // set previous error to current error (for use in the next iteration)
+		error1 = error; // set previous error to current error (for use in the next iteration)
 		time1 = time; // set previous time to current time
 		//cout<<error<<endl;
 		//cout<<error1<<endl;
-		cout<<deriv<<endl;
+		cout<<"Deriv: "<<deriv<<endl;
 		return deriv;
 	}
 };
@@ -113,8 +116,8 @@ class motor{
 		hardware_exchange();
 	}
 	void goBack(){
-		double vLeft = setPoint - 4;
-		double vRight = setPoint + 4;
+		double vLeft = setPoint - 2;
+		double vRight = setPoint + 2;
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
@@ -136,31 +139,39 @@ int main(){
 	motor mot;
 	
 	// constants need to be determined (and maybe moved to a different place?)
-	double Kd = 1;
-	double Kp = 10;
+	double Kd = 1e9;
+	double Kp = 20;
 	
 	// calls openGate and proceeds if gate opens (only used in actual operation)
 	if(openGate()){ 
 	
 		// begin main loop
 		double error1 = 0;
+		double error = 0;
+		double adjust = 0;
 		int count = 0;
-		while(count < 100){
+		while(true){
 			take_picture();
 			update_screen();
 						
 
-			double error = cam.getError(); // calls getError() method and stores error result in variable 
-			double adjust = Kp * error + Kd * cam.getDeriv(error, error1); // calculates motor adjustment value from error and its derivative
+			error = cam.getError(); // calls getError() method and stores error result in variable 
+			adjust = Kp * error + Kd * cam.getDeriv(error); // calculates motor adjustment value from error and its derivative
 			cout << adjust << endl;
 
-			//if(cam.lineCheck()){
+		//	printf("Step 1: \t Error: %f Error1: %f\n", error,error1);
+		
+
+			if(cam.lineCheck()){
+				
 				mot.followLine(adjust); // pass the adjustment to motor control
-			//}
-			//else{
-			//	mot.goBack();
-			//}
-			error1 = cam.getError();
+			}
+			else{
+				cout << "line not present"<<endl;
+				mot.goBack();
+			}
+
+		//	printf("Step 2: \t Error: %f Error1: %f\n", error,error1);
 			count++;
 			//sleep1(100);		
 		}
