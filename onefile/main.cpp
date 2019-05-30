@@ -102,8 +102,8 @@ class camera{
 class motor{
 	private:
 	const double setPoint = 47; // set point speed (both motors stopped)
-	double baseLeft = setPoint + 8; // this is base value for motor 5
-	double baseRight = setPoint - 8; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
+	double baseLeft = setPoint + 4; // this is base value for motor 5
+	double baseRight = setPoint - 4; // this is base value for motor 1 (note that it tends to run 2 slower than motor 5)
 	
 	public:
 	// sets motor speeds according to error
@@ -121,7 +121,14 @@ class motor{
 		set_motors(1,vRight);
 		set_motors(5,vLeft);
 		hardware_exchange();
-		sleep1(10);
+		sleep1(100);
+	}
+
+	void goForward(){
+		set_motors(1,37);
+		set_motors(5,52);
+		hardware_exchange();
+		sleep1(2000);
 	}
 	
 };
@@ -145,6 +152,8 @@ int main(){
 	// calls openGate and proceeds if gate opens (only used in actual operation)
 	if(openGate()){ 
 	
+		mot.goForward();		
+
 		// begin main loop
 		double error = 0;
 		double adjust = 0;
